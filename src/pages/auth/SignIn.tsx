@@ -1,12 +1,41 @@
+import { zodResolver } from "@hookform/resolvers/zod";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 import { Button } from "~/components/ui/Button";
 import { Input } from "~/components/ui/Input";
 import { Label } from "~/components/ui/Label";
+import { sleep } from "~/utils/sleep";
+
+const signinFormSchema = z.object({
+  email: z
+    .string({ required_error: "O e-mail é obrigatório" })
+    .min(1, "O e-mail é obrigatório")
+    .email("E-mail inválido"),
+});
+
+type SignInFormInput = z.input<typeof signinFormSchema>;
 
 interface SignInProps {}
 
 export function SignIn({}: SignInProps): JSX.Element | null {
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm<SignInFormInput>({
+    resolver: zodResolver(signinFormSchema),
+    defaultValues: {
+      email: "",
+    },
+  });
+
+  const handleSignIn = handleSubmit(async values => {
+    console.log(values);
+    await sleep(2000);
+  });
+
   return (
     <Fragment>
       <Helmet title="Login" />
@@ -23,18 +52,17 @@ export function SignIn({}: SignInProps): JSX.Element | null {
             </p>
           </div>
 
-          <form
-            className="space-y-4"
-            onSubmit={event => event.preventDefault()}
-          >
-            <div className="space-y-2">
-              <Label htmlFor="email">Seu e-mail</Label>
-              <Input id="email" type="email" />
-            </div>
+          <form onSubmit={handleSignIn}>
+            <fieldset className="space-y-4" disabled={isSubmitting}>
+              <div className="space-y-2">
+                <Label htmlFor="email">Seu e-mail</Label>
+                <Input id="email" type="email" {...register("email")} />
+              </div>
 
-            <Button type="submit" className="w-full">
-              Acessar painel
-            </Button>
+              <Button type="submit" className="w-full">
+                Acessar painel
+              </Button>
+            </fieldset>
           </form>
         </div>
       </div>
