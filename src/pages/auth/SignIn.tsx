@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/Button";
 import { Input } from "~/components/ui/Input";
@@ -31,10 +32,21 @@ export function SignIn({}: SignInProps): JSX.Element | null {
     },
   });
 
-  const handleSignIn = handleSubmit(async values => {
-    console.log(values);
-    await sleep(2000);
-  });
+  async function handleSignIn(values: SignInFormInput) {
+    try {
+      console.log(values);
+      await sleep(2000);
+      toast.success("Enviamos um link de autenticação para seu e-mail.", {
+        action: {
+          label: "Reenviar",
+          onClick: () => handleSignIn(values),
+        },
+      });
+    } catch (error) {
+      console.log(error);
+      toast.error("Credenciais inválidas.");
+    }
+  }
 
   return (
     <Fragment>
@@ -52,7 +64,7 @@ export function SignIn({}: SignInProps): JSX.Element | null {
             </p>
           </div>
 
-          <form onSubmit={handleSignIn}>
+          <form onSubmit={handleSubmit(handleSignIn)}>
             <fieldset className="space-y-4" disabled={isSubmitting}>
               <div className="space-y-2">
                 <Label htmlFor="email">Seu e-mail</Label>
