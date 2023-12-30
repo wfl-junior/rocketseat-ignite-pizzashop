@@ -2,6 +2,7 @@ import { ArrowRight, Search, X } from "lucide-react";
 import { Button } from "~/components/ui/Button";
 import { Dialog, DialogTrigger } from "~/components/ui/Dialog";
 import { TableCell, TableRow } from "~/components/ui/Table";
+import { formatCurrency } from "~/utils/formatCurrency";
 import { OrderDetails } from "./OrderDetails";
 
 interface OrdersTableRowProps {}
@@ -40,7 +41,7 @@ export function OrdersTableRow({}: OrdersTableRowProps): JSX.Element | null {
       </TableCell>
 
       <TableCell className="font-medium">Wallace Júnior</TableCell>
-      <TableCell className="font-medium">R$ 149,90</TableCell>
+      <TableCell className="font-medium">{formatCurrency(149.9)}</TableCell>
 
       <TableCell>
         <Button size="xs" variant="outline" className="flex items-center gap-2">

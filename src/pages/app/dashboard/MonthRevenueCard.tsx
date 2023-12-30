@@ -1,5 +1,6 @@
 import { DollarSign } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
+import { formatCurrency } from "~/utils/formatCurrency";
 
 interface MonthRevenueCardProps {}
 
@@ -15,7 +16,9 @@ export function MonthRevenueCard({}: MonthRevenueCardProps): JSX.Element | null 
       </CardHeader>
 
       <CardContent className="space-y-1">
-        <span className="text-2xl font-bold tracking-tight">R$ 1.248,60</span>
+        <span className="text-2xl font-bold tracking-tight">
+          {formatCurrency(1248.6)}
+        </span>
 
         <p className="text-xs text-muted-foreground">
           <span className="text-emerald-500 dark:text-emerald-400">+2%</span> em

@@ -13,6 +13,7 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/Table";
+import { formatCurrency } from "~/utils/formatCurrency";
 
 interface OrderDetailsProps {}
 
@@ -83,15 +84,27 @@ export function OrderDetails({}: OrderDetailsProps): JSX.Element | null {
             <TableRow>
               <TableCell>Pizza Pepperoni Família</TableCell>
               <TableCell className="text-right">2</TableCell>
-              <TableCell className="text-right">R$ 69,90</TableCell>
-              <TableCell className="text-right">R$ 139,80</TableCell>
+
+              <TableCell className="text-right">
+                {formatCurrency(69.9)}
+              </TableCell>
+
+              <TableCell className="text-right">
+                {formatCurrency(69.9 * 2)}
+              </TableCell>
             </TableRow>
 
             <TableRow>
               <TableCell>Pizza Mussarela Família</TableCell>
               <TableCell className="text-right">2</TableCell>
-              <TableCell className="text-right">R$ 59,90</TableCell>
-              <TableCell className="text-right">R$ 119,80</TableCell>
+
+              <TableCell className="text-right">
+                {formatCurrency(59.9)}
+              </TableCell>
+
+              <TableCell className="text-right">
+                {formatCurrency(59.9 * 2)}
+              </TableCell>
             </TableRow>
           </TableBody>
 
@@ -100,7 +113,7 @@ export function OrderDetails({}: OrderDetailsProps): JSX.Element | null {
               <TableCell colSpan={3}>Total do pedido</TableCell>
 
               <TableCell className="whitespace-nowrap text-right font-medium">
-                R$ 259,60
+                {formatCurrency(69.9 * 2 + 59.9 * 2)}
               </TableCell>
             </TableRow>
           </TableFooter>
