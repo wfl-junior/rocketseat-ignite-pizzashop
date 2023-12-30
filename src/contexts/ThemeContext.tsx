@@ -9,16 +9,16 @@ interface ThemeContextData {
 
 const ThemeContext = createContext({} as ThemeContextData);
 
+const defaultTheme: Theme = "system";
+const storageKey = "@pizzashop/theme";
+
 interface ThemeContextProviderProps {
   children: React.ReactNode;
   defaultTheme?: Theme;
-  storageKey?: string;
 }
 
 export function ThemeContextProvider({
   children,
-  defaultTheme = "system",
-  storageKey = "vite-ui-theme",
 }: ThemeContextProviderProps): JSX.Element | null {
   const [theme, setTheme] = useState<Theme>(
     () => (localStorage.getItem(storageKey) as Theme) || defaultTheme,
@@ -34,8 +34,7 @@ export function ThemeContextProvider({
         ? "dark"
         : "light";
 
-      root.classList.add(systemTheme);
-      return;
+      return root.classList.add(systemTheme);
     }
 
     root.classList.add(theme);

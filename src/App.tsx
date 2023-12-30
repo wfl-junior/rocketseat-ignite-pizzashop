@@ -9,7 +9,7 @@ interface AppProps {}
 export function App({}: AppProps): JSX.Element | null {
   return (
     <HelmetProvider>
-      <ThemeContextProvider storageKey="@pizzashop/theme">
+      <ThemeContextProvider>
         <Helmet titleTemplate="%s | pizza.shop" />
         <Toaster richColors position="bottom-right" />
         <RouterProvider router={router} />
