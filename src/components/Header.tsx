@@ -1,5 +1,7 @@
 import { Home, Pizza, UtensilsCrossed } from "lucide-react";
+import { AccountMenu } from "./AccountMenu";
 import { NavLink } from "./NavLink";
+import { ThemeToggle } from "./ThemeToggle";
 import { Separator } from "./ui/Separator";
 
 interface HeaderProps {}
@@ -22,6 +24,11 @@ export function Header({}: HeaderProps): JSX.Element | null {
             Pedidos
           </NavLink>
         </nav>
+
+        <div className="ml-auto flex items-center gap-2">
+          <ThemeToggle />
+          <AccountMenu />
+        </div>
       </div>
     </header>
   );
