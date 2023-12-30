@@ -2,6 +2,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "~/components/ui/Button";
@@ -9,14 +10,14 @@ import { Input } from "~/components/ui/Input";
 import { Label } from "~/components/ui/Label";
 import { sleep } from "~/utils/sleep";
 
-const signinFormSchema = z.object({
+const signInFormSchema = z.object({
   email: z
     .string({ required_error: "O e-mail é obrigatório" })
     .min(1, "O e-mail é obrigatório")
     .email("E-mail inválido"),
 });
 
-type SignInFormInput = z.input<typeof signinFormSchema>;
+type SignInFormInput = z.input<typeof signInFormSchema>;
 
 interface SignInProps {}
 
@@ -26,7 +27,7 @@ export function SignIn({}: SignInProps): JSX.Element | null {
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignInFormInput>({
-    resolver: zodResolver(signinFormSchema),
+    resolver: zodResolver(signInFormSchema),
     defaultValues: {
       email: "",
     },
@@ -36,6 +37,7 @@ export function SignIn({}: SignInProps): JSX.Element | null {
     try {
       console.log(values);
       await sleep(2000);
+
       toast.success("Enviamos um link de autenticação para seu e-mail.", {
         action: {
           label: "Reenviar",
@@ -52,7 +54,11 @@ export function SignIn({}: SignInProps): JSX.Element | null {
     <Fragment>
       <Helmet title="Login" />
 
-      <div className="p-8">
+      <div className="flex w-full items-center justify-center p-8">
+        <Button variant="ghost" asChild className="absolute right-8 top-8">
+          <Link to="/sign-up">Novo estabelecimento</Link>
+        </Button>
+
         <div className="flex w-full max-w-[350px] flex-col justify-center gap-6">
           <div className="flex flex-col gap-2 text-center">
             <h1 className="text-2xl font-semibold tracking-tight">

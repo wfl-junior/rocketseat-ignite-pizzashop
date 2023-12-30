@@ -9,7 +9,7 @@ export function App({}: AppProps): JSX.Element | null {
   return (
     <HelmetProvider>
       <Helmet titleTemplate="%s | pizza.shop" />
-      <Toaster richColors position="top-right" />
+      <Toaster richColors position="bottom-right" />
       <RouterProvider router={router} />
     </HelmetProvider>
   );
