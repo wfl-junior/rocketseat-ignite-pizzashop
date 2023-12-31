@@ -47,11 +47,16 @@ const data = [
   },
 ];
 
+const lineChartStyle = {
+  overflow: "visible",
+  fontSize: 12,
+};
+
 interface RevenueChartProps {}
 
 export function RevenueChart({}: RevenueChartProps): JSX.Element | null {
   return (
-    <Card className="col-span-6">
+    <Card className="md:col-span-6">
       <CardHeader className="flex-row items-center justify-between pb-8">
         <div className="space-y-1">
           <CardTitle className="text-base font-medium">
@@ -64,7 +69,7 @@ export function RevenueChart({}: RevenueChartProps): JSX.Element | null {
 
       <CardContent>
         <ResponsiveContainer width="100%" height={240}>
-          <LineChart data={data} style={{ fontSize: 12 }}>
+          <LineChart data={data} {...lineChartStyle}>
             <XAxis dataKey="date" tickLine={false} axisLine={false} dy={16} />
 
             <YAxis

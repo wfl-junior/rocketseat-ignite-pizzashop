@@ -1,4 +1,5 @@
 import { Home, Pizza, UtensilsCrossed } from "lucide-react";
+import { Link } from "react-router-dom";
 import { AccountMenu } from "./AccountMenu";
 import { NavLink } from "./NavLink";
 import { ThemeToggle } from "./ThemeToggle";
@@ -10,7 +11,10 @@ export function Header({}: HeaderProps): JSX.Element | null {
   return (
     <header className="border-b">
       <div className="flex h-16 items-center gap-6 px-6">
-        <Pizza className="h-6 w-6" />
+        <Link to="/">
+          <Pizza className="h-6 w-6" />
+        </Link>
+
         <Separator orientation="vertical" className="h-6" />
 
         <nav className="flex items-center gap-4 lg:gap-6">
