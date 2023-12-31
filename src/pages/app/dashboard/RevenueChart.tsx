@@ -1,4 +1,11 @@
-import { Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  XAxis,
+  YAxis,
+} from "recharts";
 import colors from "tailwindcss/colors";
 import {
   Card,
@@ -66,6 +73,8 @@ export function RevenueChart({}: RevenueChartProps): JSX.Element | null {
               tickLine={false}
               tickFormatter={formatCurrency}
             />
+
+            <CartesianGrid vertical={false} className="stroke-muted" />
 
             <Line
               type="linear"
