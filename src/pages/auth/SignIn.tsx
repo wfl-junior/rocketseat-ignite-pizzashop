@@ -1,14 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useMutation } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
+import { signIn } from "~/api/sign-in";
 import { Button } from "~/components/ui/Button";
 import { Input } from "~/components/ui/Input";
 import { Label } from "~/components/ui/Label";
-import { sleep } from "~/utils/sleep";
 
 const signInFormSchema = z.object({
   email: z
@@ -33,10 +34,13 @@ export function SignIn({}: SignInProps): JSX.Element | null {
     },
   });
 
+  const { mutateAsync: authenticate } = useMutation({
+    mutationFn: signIn,
+  });
+
   async function handleSignIn(values: SignInFormInput) {
     try {
-      console.log(values);
-      await sleep(2000);
+      await authenticate(values);
 
       toast.success("Enviamos um link de autenticação para seu e-mail.", {
         action: {
