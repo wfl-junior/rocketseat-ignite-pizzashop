@@ -3,6 +3,7 @@ import { Building, ChevronDown, LogOut } from "lucide-react";
 import { Fragment } from "react";
 import { getManagedRestaurant } from "~/api/get-managed-restaurant";
 import { getProfile } from "~/api/get-profile";
+import { QueryKeys } from "~/lib/react-query";
 import { StoreProfileDialog } from "./StoreProfileDialog";
 import { Button } from "./ui/Button";
 import { Dialog, DialogContent, DialogTrigger } from "./ui/Dialog";
@@ -20,14 +21,14 @@ interface AccountMenuProps {}
 
 export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
-    queryKey: ["profile"],
+    queryKey: [QueryKeys.Profile],
     queryFn: getProfile,
     staleTime: Infinity,
   });
 
   const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
     useQuery({
-      queryKey: ["managed-restaurant"],
+      queryKey: [QueryKeys.ManagedRestaurant],
       queryFn: getManagedRestaurant,
       staleTime: Infinity,
     });

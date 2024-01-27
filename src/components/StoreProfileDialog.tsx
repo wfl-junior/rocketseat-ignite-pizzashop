@@ -1,11 +1,15 @@
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useMutation, useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
-import { getManagedRestaurant } from "~/api/get-managed-restaurant";
+import {
+  GetManagedRestaurantResponse,
+  getManagedRestaurant,
+} from "~/api/get-managed-restaurant";
 import { updateProfile } from "~/api/update-profile";
+import { QueryKeys } from "~/lib/react-query";
 import { Button } from "./ui/Button";
 import {
   DialogClose,
@@ -30,8 +34,9 @@ type StoreProfileFormInput = z.input<typeof storeProfileFormSchema>;
 interface StoreProfileDialogProps {}
 
 export function StoreProfileDialog({}: StoreProfileDialogProps): JSX.Element | null {
+  const queryClient = useQueryClient();
   const { data: managedRestaurant } = useQuery({
-    queryKey: ["managed-restaurant"],
+    queryKey: [QueryKeys.ManagedRestaurant],
     queryFn: getManagedRestaurant,
     staleTime: Infinity,
   });
@@ -50,6 +55,17 @@ export function StoreProfileDialog({}: StoreProfileDialogProps): JSX.Element | n
 
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
+    onSuccess(_data, variables) {
+      queryClient.setQueryData<GetManagedRestaurantResponse>(
+        [QueryKeys.ManagedRestaurant],
+        data => {
+          if (!data) return;
+          const newData = structuredClone(data);
+          Object.assign(newData, variables);
+          return newData;
+        },
+      );
+    },
   });
 
   const handleUpdateProfile = handleSubmit(async values => {
