@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { toast } from "sonner";
 import { z } from "zod";
 import { signIn } from "~/api/sign-in";
@@ -23,6 +23,7 @@ type SignInFormInput = z.input<typeof signInFormSchema>;
 interface SignInProps {}
 
 export function SignIn({}: SignInProps): JSX.Element | null {
+  const [searchParams] = useSearchParams();
   const {
     register,
     handleSubmit,
@@ -30,7 +31,7 @@ export function SignIn({}: SignInProps): JSX.Element | null {
   } = useForm<SignInFormInput>({
     resolver: zodResolver(signInFormSchema),
     defaultValues: {
-      email: "",
+      email: searchParams.get("email") ?? "",
     },
   });
 
