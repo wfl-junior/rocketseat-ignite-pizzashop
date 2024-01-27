@@ -50,7 +50,7 @@ export function SignIn({}: SignInProps): JSX.Element | null {
         },
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Credenciais inválidas.");
     }
   }

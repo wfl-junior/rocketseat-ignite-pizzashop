@@ -22,12 +22,14 @@ export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: ["profile"],
     queryFn: getProfile,
+    staleTime: Infinity,
   });
 
   const { data: managedRestaurant, isLoading: isLoadingManagedRestaurant } =
     useQuery({
       queryKey: ["managed-restaurant"],
       queryFn: getManagedRestaurant,
+      staleTime: Infinity,
     });
 
   return (
@@ -69,7 +71,10 @@ export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
           <DropdownMenuSeparator />
 
           <DialogTrigger asChild>
-            <DropdownMenuItem className="cursor-pointer space-x-2">
+            <DropdownMenuItem
+              className="cursor-pointer space-x-2"
+              disabled={isLoadingManagedRestaurant}
+            >
               <Building className="h-4 w-4" />
               <span>Perfil da loja</span>
             </DropdownMenuItem>

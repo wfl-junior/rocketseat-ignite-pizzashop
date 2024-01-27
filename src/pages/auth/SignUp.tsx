@@ -59,7 +59,7 @@ export function SignUp({}: SignUpProps): JSX.Element | null {
         },
       });
     } catch (error) {
-      console.log(error);
+      console.error(error);
       toast.error("Não foi possível cadastrar restaurante.");
     }
   }

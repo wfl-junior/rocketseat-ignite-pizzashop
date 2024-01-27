@@ -9,7 +9,7 @@ export const api = axios.create({
 
 if (env.VITE_ENABLE_API_DELAY) {
   api.interceptors.request.use(async config => {
-    await sleep(2000);
+    await sleep(1000);
     return config;
   });
 }
