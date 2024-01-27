@@ -1,13 +1,26 @@
+import { formatDistanceToNow } from "date-fns";
+import { ptBR } from "date-fns/locale";
 import { ArrowRight, Search, X } from "lucide-react";
+import { OrderStatus } from "~/components/OrderStatus";
 import { Button } from "~/components/ui/Button";
 import { Dialog, DialogTrigger } from "~/components/ui/Dialog";
 import { TableCell, TableRow } from "~/components/ui/Table";
 import { formatCurrency } from "~/utils/formatCurrency";
 import { OrderDetails } from "./OrderDetails";
 
-interface OrdersTableRowProps {}
+interface OrdersTableRowProps {
+  order: {
+    orderId: string;
+    createdAt: string;
+    status: "pending" | "canceled" | "processing" | "delivering" | "delivered";
+    customerName: string;
+    total: number;
+  };
+}
 
-export function OrdersTableRow({}: OrdersTableRowProps): JSX.Element | null {
+export function OrdersTableRow({
+  order,
+}: OrdersTableRowProps): JSX.Element | null {
   return (
     <TableRow>
       <TableCell>
@@ -24,24 +37,25 @@ export function OrdersTableRow({}: OrdersTableRowProps): JSX.Element | null {
       </TableCell>
 
       <TableCell className="font-mono text-xs font-medium">
-        asuhaisgq1782y1
+        {order.orderId}
       </TableCell>
 
-      <TableCell className="text-muted-foreground">há 15 minutos</TableCell>
+      <TableCell className="text-muted-foreground">
+        {formatDistanceToNow(order.createdAt, {
+          locale: ptBR,
+          addSuffix: true,
+        })}
+      </TableCell>
 
       <TableCell>
-        <div className="flex items-center gap-2">
-          <span
-            aria-hidden
-            className="aspect-square w-2 rounded-full bg-slate-400"
-          />
-
-          <span className="font-medium text-muted-foreground">Pendente</span>
-        </div>
+        <OrderStatus status={order.status} />
       </TableCell>
 
-      <TableCell className="font-medium">Wallace Júnior</TableCell>
-      <TableCell className="font-medium">{formatCurrency(149.9)}</TableCell>
+      <TableCell className="font-medium">{order.customerName}</TableCell>
+
+      <TableCell className="font-medium">
+        {formatCurrency(order.total)}
+      </TableCell>
 
       <TableCell>
         <Button size="xs" variant="outline" className="flex items-center gap-2">

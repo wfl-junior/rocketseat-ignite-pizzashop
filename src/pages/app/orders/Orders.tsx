@@ -1,5 +1,7 @@
+import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
+import { getOrders } from "~/api/get-orders";
 import { Pagination } from "~/components/Pagination";
 import {
   Table,
@@ -8,12 +10,18 @@ import {
   TableHeader,
   TableRow,
 } from "~/components/ui/Table";
+import { QueryKeys } from "~/lib/react-query";
 import { OrdersTableFilters } from "./OrdersTableFilters";
 import { OrdersTableRow } from "./OrdersTableRow";
 
 interface OrdersProps {}
 
 export function Orders({}: OrdersProps): JSX.Element | null {
+  const { data } = useQuery({
+    queryKey: [QueryKeys.Orders],
+    queryFn: getOrders,
+  });
+
   return (
     <Fragment>
       <Helmet title="Pedidos" />
@@ -40,8 +48,8 @@ export function Orders({}: OrdersProps): JSX.Element | null {
               </TableHeader>
 
               <TableBody>
-                {Array.from({ length: 8 }).map((_, index) => (
-                  <OrdersTableRow key={index} />
+                {data?.orders.map(order => (
+                  <OrdersTableRow key={order.orderId} order={order} />
                 ))}
               </TableBody>
             </Table>
