@@ -1,8 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { Building, ChevronDown, LogOut } from "lucide-react";
 import { Fragment } from "react";
+import { useNavigate } from "react-router-dom";
 import { getManagedRestaurant } from "~/api/get-managed-restaurant";
 import { getProfile } from "~/api/get-profile";
+import { signOut } from "~/api/sign-out";
 import { QueryKeys } from "~/lib/react-query";
 import { StoreProfileDialog } from "./StoreProfileDialog";
 import { Button } from "./ui/Button";
@@ -20,6 +22,7 @@ import { Skeleton } from "./ui/Skeleton";
 interface AccountMenuProps {}
 
 export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
+  const navigate = useNavigate();
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
     queryKey: [QueryKeys.Profile],
     queryFn: getProfile,
@@ -32,6 +35,13 @@ export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
       queryFn: getManagedRestaurant,
       staleTime: Infinity,
     });
+
+  const { mutateAsync: signOutFn, isPending: isSigningOut } = useMutation({
+    mutationFn: signOut,
+    onSuccess() {
+      navigate("/sign-in");
+    },
+  });
 
   return (
     <Dialog>
@@ -81,7 +91,11 @@ export function AccountMenu({}: AccountMenuProps): JSX.Element | null {
             </DropdownMenuItem>
           </DialogTrigger>
 
-          <DropdownMenuItem className="cursor-pointer space-x-2 text-rose-500 dark:text-rose-400">
+          <DropdownMenuItem
+            disabled={isSigningOut}
+            onSelect={() => signOutFn()}
+            className="cursor-pointer space-x-2 text-rose-500 dark:text-rose-400"
+          >
             <LogOut className="h-4 w-4" />
             <span>Sair</span>
           </DropdownMenuItem>
