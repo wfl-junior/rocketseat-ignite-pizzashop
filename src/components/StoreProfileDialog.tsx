@@ -53,18 +53,31 @@ export function StoreProfileDialog({}: StoreProfileDialogProps): JSX.Element | n
     },
   });
 
+  function updateManagedRestaurantCache(values: StoreProfileFormInput) {
+    queryClient.setQueryData<GetManagedRestaurantResponse>(
+      [QueryKeys.ManagedRestaurant],
+      data => {
+        if (!data) return;
+        const newData = structuredClone(data);
+        Object.assign(newData, values);
+        return newData;
+      },
+    );
+  }
+
   const { mutateAsync: updateProfileFn } = useMutation({
     mutationFn: updateProfile,
-    onSuccess(_data, variables) {
-      queryClient.setQueryData<GetManagedRestaurantResponse>(
-        [QueryKeys.ManagedRestaurant],
-        data => {
-          if (!data) return;
-          const newData = structuredClone(data);
-          Object.assign(newData, variables);
-          return newData;
-        },
-      );
+    onMutate(variables) {
+      updateManagedRestaurantCache(variables);
+
+      return {
+        previousManagedRestaurant: managedRestaurant,
+      };
+    },
+    onError(_error, _variables, context) {
+      if (context?.previousManagedRestaurant) {
+        updateManagedRestaurantCache(context.previousManagedRestaurant);
+      }
     },
   });
 
