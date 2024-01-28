@@ -10,21 +10,18 @@ export function AppLayout({}: AppLayoutProps): JSX.Element | null {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const interceptorId = api.interceptors.response.use(
-      undefined,
-      async error => {
-        if (isAxiosError(error)) {
-          const status = error.response?.status;
-          const code = error.response?.data.code;
+    const interceptorId = api.interceptors.response.use(undefined, error => {
+      if (isAxiosError(error)) {
+        const status = error.response?.status;
+        const code = error.response?.data.code;
 
-          if (status === 401 && code === "UNAUTHORIZED") {
-            navigate("/sign-in");
-          }
+        if (status === 401 && code === "UNAUTHORIZED") {
+          navigate("/sign-in");
         }
+      }
 
-        return Promise.reject(error);
-      },
-    );
+      return Promise.reject(error);
+    });
 
     return () => {
       api.interceptors.response.eject(interceptorId);
