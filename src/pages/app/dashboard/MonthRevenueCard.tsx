@@ -5,6 +5,7 @@ import { getMonthRevenue } from "~/api/get-month-revenue";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
 import { QueryKeys } from "~/lib/react-query";
 import { formatCurrency } from "~/utils/formatCurrency";
+import { MetricCardSkeleton } from "./MetricCardSkeleton";
 
 interface MonthRevenueCardProps {}
 
@@ -25,7 +26,7 @@ export function MonthRevenueCard({}: MonthRevenueCardProps): JSX.Element | null 
       </CardHeader>
 
       <CardContent className="space-y-1">
-        {data && (
+        {data ? (
           <Fragment>
             <span className="text-2xl font-bold tracking-tight">
               {formatCurrency(data.receipt / 100)}
@@ -46,6 +47,8 @@ export function MonthRevenueCard({}: MonthRevenueCardProps): JSX.Element | null 
               relação ao mês passado
             </p>
           </Fragment>
+        ) : (
+          <MetricCardSkeleton />
         )}
       </CardContent>
     </Card>

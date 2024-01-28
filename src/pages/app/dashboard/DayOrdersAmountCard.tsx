@@ -4,6 +4,7 @@ import { Fragment } from "react";
 import { getDayOrdersAmount } from "~/api/get-day-orders-amount";
 import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/Card";
 import { QueryKeys } from "~/lib/react-query";
+import { MetricCardSkeleton } from "./MetricCardSkeleton";
 
 interface DayOrdersAmountCardProps {}
 
@@ -21,7 +22,7 @@ export function DayOrdersAmountCard({}: DayOrdersAmountCardProps): JSX.Element |
       </CardHeader>
 
       <CardContent className="space-y-1">
-        {data && (
+        {data ? (
           <Fragment>
             <span className="text-2xl font-bold tracking-tight">
               {data.amount.toLocaleString("pt-BR")}
@@ -42,6 +43,8 @@ export function DayOrdersAmountCard({}: DayOrdersAmountCardProps): JSX.Element |
               em relação a ontem
             </p>
           </Fragment>
+        ) : (
+          <MetricCardSkeleton />
         )}
       </CardContent>
     </Card>
