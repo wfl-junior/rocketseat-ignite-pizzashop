@@ -1,9 +1,36 @@
-import { Outlet } from "react-router-dom";
+import { isAxiosError } from "axios";
+import { useEffect } from "react";
+import { Outlet, useNavigate } from "react-router-dom";
 import { Header } from "~/components/Header";
+import { api } from "~/lib/axios";
 
 interface AppLayoutProps {}
 
 export function AppLayout({}: AppLayoutProps): JSX.Element | null {
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const interceptorId = api.interceptors.response.use(
+      undefined,
+      async error => {
+        if (isAxiosError(error)) {
+          const status = error.response?.status;
+          const code = error.response?.data.code;
+
+          if (status === 401 && code === "UNAUTHORIZED") {
+            navigate("/sign-in");
+          }
+        }
+
+        return Promise.reject(error);
+      },
+    );
+
+    return () => {
+      api.interceptors.response.eject(interceptorId);
+    };
+  }, [navigate]);
+
   return (
     <div className="flex min-h-screen flex-col antialiased">
       <Header />
