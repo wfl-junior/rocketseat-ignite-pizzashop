@@ -1,3 +1,4 @@
+import { OrderStatusType } from "~/components/OrderStatus";
 import { api } from "~/lib/axios";
 
 export interface GetOrdersParams {
@@ -12,7 +13,7 @@ export interface GetOrdersResponse {
   orders: Array<{
     orderId: string;
     createdAt: string;
-    status: "pending" | "canceled" | "processing" | "delivering" | "delivered";
+    status: OrderStatusType;
     customerName: string;
     total: number;
   }>;
