@@ -8,6 +8,7 @@ export enum QueryKeys {
   Profile = "profile",
   Metrics = "metrics",
   MonthRevenue = "month-revenue",
+  PopularProducts = "popular-products",
   DayOrdersAmount = "day-orders-amount",
   ManagedRestaurant = "managed-restaurant",
   MonthOrdersAmount = "month-orders-amount",

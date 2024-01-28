@@ -10,7 +10,7 @@ interface MonthRevenueCardProps {}
 
 export function MonthRevenueCard({}: MonthRevenueCardProps): JSX.Element | null {
   const { data } = useQuery({
-    queryKey: [QueryKeys.Metrics, QueryKeys.MonthCanceledOrdersAmount],
+    queryKey: [QueryKeys.Metrics, QueryKeys.MonthRevenue],
     queryFn: getMonthRevenue,
   });
 
