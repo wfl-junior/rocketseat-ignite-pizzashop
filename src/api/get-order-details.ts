@@ -20,6 +20,9 @@ export interface GetOrderDetailsResponse {
     id: string;
     priceInCents: number;
     quantity: number;
+    product: {
+      name: string;
+    };
   }>;
 }
 

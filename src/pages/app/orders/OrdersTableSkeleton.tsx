@@ -12,7 +12,7 @@ export function OrdersTableSkeleton({}: OrdersTableSkeletonProps): JSX.Element |
       {Array.from({ length: 10 }).map((_, index) => (
         <TableRow key={index}>
           <TableCell>
-            <Button variant="outline" size="xs">
+            <Button variant="outline" size="xs" disabled>
               <Search className="h-3 w-3" />
               <span className="sr-only">Detalhes do pedido</span>
             </Button>

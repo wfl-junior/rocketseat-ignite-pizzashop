@@ -20,6 +20,7 @@ import {
 } from "~/components/ui/Table";
 import { QueryKeys } from "~/lib/react-query";
 import { formatCurrency } from "~/utils/formatCurrency";
+import { OrderDetailsSkeleton } from "./OrderDetailsSkeleton";
 
 interface OrderDetailsProps {
   orderId: string;
@@ -40,7 +41,7 @@ export function OrderDetails({
         <DialogDescription>Detalhes do pedido</DialogDescription>
       </DialogHeader>
 
-      {order && (
+      {order ? (
         <div className="space-y-6">
           <Table>
             <TableBody>
@@ -109,7 +110,7 @@ export function OrderDetails({
 
                 return (
                   <TableRow key={orderItem.id}>
-                    <TableCell>Pizza Pepperoni Família</TableCell>
+                    <TableCell>{orderItem.product.name}</TableCell>
 
                     <TableCell className="text-right">
                       {orderItem.quantity}
@@ -145,6 +146,8 @@ export function OrderDetails({
             </TableFooter>
           </Table>
         </div>
+      ) : (
+        <OrderDetailsSkeleton />
       )}
     </Fragment>
   );
