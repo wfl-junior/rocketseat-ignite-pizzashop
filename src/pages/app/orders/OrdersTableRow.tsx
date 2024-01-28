@@ -3,7 +3,7 @@ import { ptBR } from "date-fns/locale";
 import { ArrowRight, Search, X } from "lucide-react";
 import { OrderStatus } from "~/components/OrderStatus";
 import { Button } from "~/components/ui/Button";
-import { Dialog, DialogTrigger } from "~/components/ui/Dialog";
+import { Dialog, DialogContent, DialogTrigger } from "~/components/ui/Dialog";
 import { TableCell, TableRow } from "~/components/ui/Table";
 import { formatCurrency } from "~/utils/formatCurrency";
 import { OrderDetails } from "./OrderDetails";
@@ -32,7 +32,9 @@ export function OrdersTableRow({
             </Button>
           </DialogTrigger>
 
-          <OrderDetails />
+          <DialogContent>
+            <OrderDetails orderId={order.orderId} />
+          </DialogContent>
         </Dialog>
       </TableCell>
 
@@ -54,7 +56,7 @@ export function OrdersTableRow({
       <TableCell className="font-medium">{order.customerName}</TableCell>
 
       <TableCell className="font-medium">
-        {formatCurrency(order.total)}
+        {formatCurrency(order.total / 100)}
       </TableCell>
 
       <TableCell>
