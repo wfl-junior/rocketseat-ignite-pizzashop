@@ -1,6 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
 import { Fragment } from "react";
 import { Helmet } from "react-helmet-async";
+import { useSearchParams } from "react-router-dom";
+import { z } from "zod";
 import { getOrders } from "~/api/get-orders";
 import { Pagination } from "~/components/Pagination";
 import {
@@ -17,10 +19,24 @@ import { OrdersTableRow } from "./OrdersTableRow";
 interface OrdersProps {}
 
 export function Orders({}: OrdersProps): JSX.Element | null {
+  const [searchParams, setSearchParams] = useSearchParams();
+  const pageIndex = z.coerce
+    .number()
+    .catch(1)
+    .transform(page => page - 1)
+    .parse(searchParams.get("page") ?? "1");
+
   const { data } = useQuery({
-    queryKey: [QueryKeys.Orders],
-    queryFn: getOrders,
+    queryKey: [QueryKeys.Orders, pageIndex],
+    queryFn: ({ signal }) => getOrders({ signal, pageIndex }),
   });
+
+  function handlePaginate(pageIndex: number) {
+    setSearchParams(currentSearchParams => {
+      currentSearchParams.set("page", String(pageIndex + 1));
+      return currentSearchParams;
+    });
+  }
 
   return (
     <Fragment>
@@ -55,9 +71,16 @@ export function Orders({}: OrdersProps): JSX.Element | null {
             </Table>
           </div>
 
-          <div className="mt-auto">
-            <Pagination pageIndex={0} totalCount={105} perPage={10} />
-          </div>
+          {data && (
+            <div className="mt-auto">
+              <Pagination
+                perPage={data.meta.perPage}
+                onPageChange={handlePaginate}
+                pageIndex={data.meta.pageIndex}
+                totalCount={data.meta.totalCount}
+              />
+            </div>
+          )}
         </div>
       </div>
     </Fragment>
