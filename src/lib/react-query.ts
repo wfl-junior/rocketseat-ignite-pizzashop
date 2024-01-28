@@ -12,5 +12,6 @@ export enum QueryKeys {
   DayOrdersAmount = "day-orders-amount",
   ManagedRestaurant = "managed-restaurant",
   MonthOrdersAmount = "month-orders-amount",
+  DailyRevenueInPeriod = "daily-revenue-in-period",
   MonthCanceledOrdersAmount = "month-canceled-orders-amount",
 }
