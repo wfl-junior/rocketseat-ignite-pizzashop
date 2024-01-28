@@ -2,7 +2,10 @@ import { api } from "~/lib/axios";
 
 export interface GetOrdersParams {
   pageIndex?: number;
-  signal: AbortSignal;
+  signal?: AbortSignal;
+  orderId?: string | null;
+  customerName?: string | null;
+  status?: string | null;
 }
 
 export interface GetOrdersResponse {
@@ -20,10 +23,15 @@ export interface GetOrdersResponse {
   };
 }
 
-export async function getOrders({ signal, pageIndex = 0 }: GetOrdersParams) {
+export async function getOrders({
+  signal,
+  pageIndex = 0,
+  ...params
+}: GetOrdersParams = {}) {
   const response = await api.get<GetOrdersResponse>("/orders", {
     signal,
     params: {
+      ...params,
       pageIndex,
     },
   });

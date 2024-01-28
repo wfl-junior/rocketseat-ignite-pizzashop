@@ -15,8 +15,8 @@ const orderStatusMap: Record<OrderStatusType, string> = {
   pending: "Pendente",
   canceled: "Cancelado",
   delivered: "Entregue",
-  delivering: "Entregando",
-  processing: "Processando",
+  delivering: "Em entrega",
+  processing: "Em preparo",
 };
 
 export function OrderStatus({ status }: OrderStatusProps): JSX.Element | null {

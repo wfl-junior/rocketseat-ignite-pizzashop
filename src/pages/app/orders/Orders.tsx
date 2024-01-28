@@ -20,15 +20,28 @@ interface OrdersProps {}
 
 export function Orders({}: OrdersProps): JSX.Element | null {
   const [searchParams, setSearchParams] = useSearchParams();
+
   const pageIndex = z.coerce
     .number()
     .catch(1)
     .transform(page => page - 1)
     .parse(searchParams.get("page") ?? "1");
 
+  const orderId = searchParams.get("orderId");
+  const customerName = searchParams.get("customerName");
+  const status = searchParams.get("status");
+
   const { data } = useQuery({
-    queryKey: [QueryKeys.Orders, pageIndex],
-    queryFn: ({ signal }) => getOrders({ signal, pageIndex }),
+    queryKey: [QueryKeys.Orders, pageIndex, orderId, customerName, status],
+    queryFn: ({ signal }) => {
+      return getOrders({
+        signal,
+        pageIndex,
+        orderId,
+        customerName,
+        status: status === "all" ? null : status,
+      });
+    },
   });
 
   function handlePaginate(pageIndex: number) {

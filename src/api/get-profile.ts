@@ -1,5 +1,9 @@
 import { api } from "~/lib/axios";
 
+export interface GetProfileParams {
+  signal?: AbortSignal;
+}
+
 export interface GetProfileResponse {
   id: string;
   name: string;
@@ -10,7 +14,7 @@ export interface GetProfileResponse {
   updatedAt: Date | null;
 }
 
-export async function getProfile({ signal }: { signal: AbortSignal }) {
+export async function getProfile({ signal }: GetProfileParams = {}) {
   const response = await api.get<GetProfileResponse>("/me", { signal });
   return response.data;
 }

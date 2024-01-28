@@ -1,5 +1,9 @@
 import { api } from "~/lib/axios";
 
+export interface GetManagedRestaurantParams {
+  signal?: AbortSignal;
+}
+
 export interface GetManagedRestaurantResponse {
   id: string;
   name: string;
@@ -11,9 +15,7 @@ export interface GetManagedRestaurantResponse {
 
 export async function getManagedRestaurant({
   signal,
-}: {
-  signal: AbortSignal;
-}) {
+}: GetManagedRestaurantParams = {}) {
   const response = await api.get<GetManagedRestaurantResponse>(
     "/managed-restaurant",
     { signal },
