@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router-dom";
 import { NotFound } from "./pages/404";
+import { ErrorPage } from "./pages/Error";
 import { AppLayout } from "./pages/_layouts/AppLayout";
 import { AuthLayout } from "./pages/_layouts/AuthLayout";
 import { Dashboard } from "./pages/app/dashboard/Dashboard";
@@ -11,7 +12,7 @@ export const router = createBrowserRouter([
   {
     path: "/",
     element: <AppLayout />,
-    errorElement: <NotFound />,
+    errorElement: <ErrorPage />,
     children: [
       {
         path: "/",
@@ -36,5 +37,9 @@ export const router = createBrowserRouter([
         element: <SignUp />,
       },
     ],
+  },
+  {
+    path: "*",
+    element: <NotFound />,
   },
 ]);
