@@ -1,9 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
-import { Fragment } from "react";
+import { Loader2 } from "lucide-react";
+import { Fragment, useEffect, useRef } from "react";
 import { Helmet } from "react-helmet-async";
 import { useSearchParams } from "react-router-dom";
 import { z } from "zod";
-import { getOrders } from "~/api/get-orders";
+import { GetOrdersResponse, getOrders } from "~/api/get-orders";
 import { Pagination } from "~/components/Pagination";
 import {
   Table,
@@ -15,10 +16,12 @@ import {
 import { QueryKeys } from "~/lib/react-query";
 import { OrdersTableFilters } from "./OrdersTableFilters";
 import { OrdersTableRow } from "./OrdersTableRow";
+import { OrdersTableSkeleton } from "./OrdersTableSkeleton";
 
 interface OrdersProps {}
 
 export function Orders({}: OrdersProps): JSX.Element | null {
+  const previousDataRef = useRef<GetOrdersResponse>();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const pageIndex = z.coerce
@@ -31,7 +34,11 @@ export function Orders({}: OrdersProps): JSX.Element | null {
   const customerName = searchParams.get("customerName");
   const status = searchParams.get("status");
 
-  const { data } = useQuery({
+  const {
+    data = previousDataRef.current,
+    isLoading,
+    isFetching,
+  } = useQuery({
     queryKey: [QueryKeys.Orders, pageIndex, orderId, customerName, status],
     queryFn: ({ signal }) => {
       return getOrders({
@@ -43,6 +50,10 @@ export function Orders({}: OrdersProps): JSX.Element | null {
       });
     },
   });
+
+  useEffect(() => {
+    previousDataRef.current = data;
+  }, [data]);
 
   function handlePaginate(pageIndex: number) {
     setSearchParams(currentSearchParams => {
@@ -77,21 +88,35 @@ export function Orders({}: OrdersProps): JSX.Element | null {
               </TableHeader>
 
               <TableBody>
-                {data?.orders.map(order => (
-                  <OrdersTableRow key={order.orderId} order={order} />
-                ))}
+                {isLoading ? (
+                  <OrdersTableSkeleton />
+                ) : (
+                  data?.orders.map(order => (
+                    <OrdersTableRow key={order.orderId} order={order} />
+                  ))
+                )}
               </TableBody>
             </Table>
           </div>
 
           {data && (
-            <div className="mt-auto">
+            <div className="mt-auto flex flex-col gap-2">
               <Pagination
+                pageIndex={pageIndex}
                 perPage={data.meta.perPage}
                 onPageChange={handlePaginate}
-                pageIndex={data.meta.pageIndex}
                 totalCount={data.meta.totalCount}
               />
+
+              {isFetching && (
+                <div className="flex items-center gap-2 self-end">
+                  <Loader2 className="h-4 w-4 animate-spin text-violet-500" />
+
+                  <span className="text-xs text-muted-foreground">
+                    Revalidando...
+                  </span>
+                </div>
+              )}
             </div>
           )}
         </div>
